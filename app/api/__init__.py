@@ -6,35 +6,39 @@ import json
 
 app = Flask(__name__)
 db = Connect()
-CORS(app)
+#CORS(app)
 
 @app.route('/rides/<int:direction>/<geo_filter>', methods=['GET'])
 def filter_ride_data(direction, geo_filter):
-    geo_filter = geo_filter[1:].replace('_', ' ')
-    geo_filter = 'POLYGON(({}))'.format(geo_filter)
-    direction = direction
+    try:
+        geo_filter = geo_filter[1:].replace('_', ' ')
+        geo_filter = 'POLYGON(({}))'.format(geo_filter)
+        direction = direction
 
-    ride_service = RideService(db)
-    ride_service.prepare(direction, geo_filter)
+        ride_service = RideService(db)
+        ride_service.prepare(direction, geo_filter)
 
-    resp = {
-        'type': 'FeatureCollection',
-        'features': []
-    }
-
-    for r in ride_service.gen_filter_rides():
-
-        gj = json.loads(r[1])
-        gj = {
-            'type': 'Feature',
-            'geometry': gj,
-            'properties': {'time': r[0] }
+        resp = {
+            'type': 'FeatureCollection',
+            'features': []
         }
 
-        resp['features'].append(gj)
+        for r in ride_service.gen_filter_rides():
+
+            gj = json.loads(r[1])
+            gj = {
+                'type': 'Feature',
+                'geometry': gj,
+                'properties': {'time': r[0] }
+            }
+
+            resp['features'].append(gj)
 
 
-    return jsonify(resp);
+        return jsonify(resp);
+
+    except Exception as e:
+        print(e)
 
 
 @app.route('/rides/stream/<int:direction>/<geo_filter>', methods=['GET'])
