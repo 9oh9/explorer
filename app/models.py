@@ -5,7 +5,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from geoalchemy2 import Geography, Geometry
 from sqlalchemy.sql import text
-import psycopg2
 
 engine = create_engine('postgresql://uber_app:q94EMtInmu7jBj8sUi3qVQ2yYo8bYWva@localhost:9000/uber')
 Base = declarative_base()

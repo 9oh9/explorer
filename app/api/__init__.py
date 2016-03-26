@@ -2,10 +2,11 @@ from flask import Flask, jsonify, Response
 from ..models import RideService, Connect
 from ..utils import date_to_str
 from flask.ext.cors import CORS
+from ..db import Postgres
 import json
 
 app = Flask(__name__)
-db = Connect()
+db = Postgres(app)
 #CORS(app)
 
 @app.route('/rides/<int:direction>/<geo_filter>', methods=['GET'])
@@ -15,7 +16,7 @@ def filter_ride_data(direction, geo_filter):
         geo_filter = 'POLYGON(({}))'.format(geo_filter)
         direction = direction
 
-        ride_service = RideService(db)
+        ride_service = RideService(db.connection)
         ride_service.prepare(direction, geo_filter)
 
         resp = {
