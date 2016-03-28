@@ -10,7 +10,7 @@ PostGIS extension.  Data was transformed using a python script which compared th
 two records.  Setting the record with the earlier datetime as the pickup and the record with the
 later datetime as the dropoff.
 
-The api was written using Flask microframework written in python.  The application was deployed
+The api is written using Flask microframework written in python.  The application is deployed
 using uwsgi wsgi server and proxied by nginx.  Database connections were made via the python
 library psycopg2 which allowed for calls to the stored procedure used to retrieve data
 completely contained by the polygon geography / geometric feature provided via the clients api
@@ -26,9 +26,9 @@ dropoff locations.  GIST indexes were added to both Point fields to improve quer
 index creates a bounding box for the geometric shape of the field in question. This allows for
 faster intersection comparisons for Geospatial specific functions.  A stored procedure was
 written to perform the select of contained Rides.  In order make the query as performant as
-possible the following strategy was employed.  The POLYGON geometric feature was passed to the
-stored procedure as a string. A temporary table was created to hold the value of the client
-passed polygon.  The value of the polygon was then inserted into the temporary table and indexed
+possible the following strategy was employed.  The POLYGON geometric feature is passed to the
+stored procedure as a string. A temporary table is created to hold the value of the client
+passed polygon.  The value of the polygon is then inserted into the temporary table and indexed
 using a GIST index.  This was done to help postgis better compare the polygon against the ride
 pickup / dropoff POINT fields when performing the ST_Within function.  The stored procedure
 returns a table type object allowing the procedure call to be selected from as a table.
@@ -42,16 +42,17 @@ high latency of the spatial DB query against a large dataset steered the impleme
 simpler solution with psycopg2 that provided less overhead than that of an ORM.  A simple flask
 extension was written to open and destroy database connection on each request context.  The
 python package is itself set up with growth in mind.  The API code resides in its own module
-directory.  The package has also been set up to easily create python execubles via setup.py fo
-jobs independent of the API.  Data was returned from the API as JSON.  Specifically JSON
-compliant to the GeoJSON spec.  A universally supported geospatial data format.  This allowed
-for seamless integration onto the map upon return to the client.
+directory.  The package has also been set up to easily create python execubles via setup.py for
+jobs independent of the API (as is the case for the data transformation script / executable).
+Data is returned from the API as JSON.  Specifically JSON compliant to the GeoJSON spec.
+A universally supported geospatial data format.  This allows for seamless integration
+onto the map upon return to the client.
 
 
 ## Client
 
-The clientside application was built using ES6 javascript.  The JSPM (Javascript Packaage
-Manager) was used to provide module support for all javascript module types (ES6, Commonjs,
+The clientside application is built using ES6 javascript.  The JSPM (Javascript Packaage
+Manager) is used to provide module support for all javascript module types (ES6, Commonjs,
 etc).  It also served as the transpiler from ES6 javascript to the browser supported ES5.
 AngularJS was selected to provide the foundation of the application as a single page clientside
 application.  The application  made use of the Google Maps Javascript API for all map related
